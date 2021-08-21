@@ -17,6 +17,7 @@ The WebGLFileSaver class has two static functions to use:
 	This returns a boolean value of whether saving is supported on the current OS and Browser or not.
 
 2) `public static void SaveFile(string content, string filename, string MIMEType)`
+	`public static void SaveFile(byte[] content, string filename, string MIMEType)`
 	This prompts the user to download a file named 'filename', with the content 'content'.
 	The MIMEType is the file type that will allow the browser to open the file with a default program.
 		It can be set to any values in the IANA Media Types (https://www.iana.org/assignments/media-types/media-types.xhtml )

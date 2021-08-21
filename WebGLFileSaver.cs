@@ -8,6 +8,9 @@ public class WebGLFileSaver
 
     [DllImport("__Internal")]
     private static extern void UNITY_SAVE(string content, string name, string MIMEType);
+    
+    [DllImport ("__Internal")]
+    private static extern void UNITY_SAVE_BYTEARRAY(byte[] array, int byteLength, string name, string MIMEType);
 
     [DllImport("__Internal")]
     private static extern void init();
@@ -19,15 +22,34 @@ public class WebGLFileSaver
 
     public static void SaveFile(string content, string fileName, string MIMEType = "text/plain;charset=utf-8")
     {
+       if (!CheckSupportAndInit()) return;
+
+        UNITY_SAVE (content, fileName, MIMEType);
+    }
+    
+    public static void SaveFile(byte[] content, string fileName, string MIMEType = "text/plain;charset=utf-8")
+    {
+        if (content == null)
+        {
+            Debug.LogError("null parameter passed for content byte array");
+            return;
+        }
+        if (!CheckSupportAndInit()) return;
+
+        UNITY_SAVE_BYTEARRAY (content, content.Length, fileName, MIMEType);
+    }
+
+    static bool CheckSupportAndInit()
+    {
         if (Application.isEditor)
         {
             Debug.Log("Saving will not work in editor.");
-            return;
+            return false;
         }
         if (Application.platform != RuntimePlatform.WebGLPlayer)
         {
             Debug.Log("Saving must be on a WebGL build.");
-            return;
+            return false;
         }
 
         CheckInit();
@@ -35,9 +57,9 @@ public class WebGLFileSaver
         if (!IsSavingSupported())
         { 
             Debug.LogWarning("Saving is not supported on this device.");
-            return;
+            return false;
         }
-        UNITY_SAVE(content, fileName, MIMEType);
+        return true;
     }
 
     static void CheckInit()
