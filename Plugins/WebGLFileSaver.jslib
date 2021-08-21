@@ -154,8 +154,7 @@ mergeInto(LibraryManager.library, {
     },	
 	UNITY_SAVE: function (content, name, mimetype)
 	{
-		var blob = new Blob([Pointer_stringify(content)], {type: "text/plain;charset=utf-8"});
-        var blob = new Blob([Pointer_stringify(content)], {type: Pointer_stringify(mimetype)})
+        var blob = new Blob([Pointer_stringify(content)], { type: Pointer_stringify(mimetype) });
 		saveAs(blob, Pointer_stringify(name));
 	},
 	UNITY_IS_SUPPORTED: function ()
