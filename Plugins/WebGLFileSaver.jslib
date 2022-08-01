@@ -154,10 +154,16 @@ mergeInto(LibraryManager.library, {
     },	
 	UNITY_SAVE: function (content, name, mimetype)
 	{
-		var blob = new Blob([Pointer_stringify(content)], {type: "text/plain;charset=utf-8"});
-        var blob = new Blob([Pointer_stringify(content)], {type: Pointer_stringify(mimetype)})
+        var blob = new Blob([Pointer_stringify(content)], { type: Pointer_stringify(mimetype) });
 		saveAs(blob, Pointer_stringify(name));
 	},
+    UNITY_SAVE_BYTEARRAY: function (arr, size, name, mimetype)
+    {
+        var bytes = new Uint8Array(size);
+        for (var i = 0; i < size; i++) bytes[i] = HEAPU8[arr + i];
+        var blob = new Blob([bytes], { type: Pointer_stringify(mimetype) });
+        saveAs(blob, Pointer_stringify(name));
+    },
 	UNITY_IS_SUPPORTED: function ()
 	{
 		try 
